@@ -28,7 +28,7 @@ ssh -p 2222 jenkins@localhost
 ```
 All the requirements to enable the ssh server is handled by docker image by `lscr.io/linuxserver/openssh-server:latest`.
 
-## Jenkins Guide
+## Jenkins Installation Guide
 
 The simplest way to run Jenkins is through docker compose file. You can take a look the configuration at compose.yaml section service.pipeline.
 
@@ -83,4 +83,22 @@ If you see warning for java version, you can also use the latest official jenkin
 
 ![jenkins-java-jdk-version-warning](assets/jenkins-java-jdk-version-warning.png)
 
+We will use GitLab repository for this guide. Before that, create the access token first by accessing this url https://gitlab.com/-/user_settings/personal_access_tokens. Add new access token and make sure to have **api** scope on check.
+
+![gitlab-personal-access-token](assets/gitlab-personal-access-token.png)
+
+Next step is to go to **Manage Jenkins > System** and scroll until `GitLab` section and fill the requirements. For more information check this guide https://docs.gitlab.com/integration/jenkins/#configure-the-jenkins-server.
+
+It will look like this if succeed:
+
+![jenkins-gitlab-itegration-succeed](assets/jenkins-gitlab-itegration-succeed.png)
+
 Now the setup is done, we can move to next step, setting up the CI/CD pipeline using git integration.
+
+## CI/CD Setup
+
+First step is to create New Item.
+
+Based on GitLab guides, you can select either Pipeline or Freestyle option. We'll stick to the guide and choose Freestyle
+
+![jenkins-new-item](assets/jenkins-new-item.png)
