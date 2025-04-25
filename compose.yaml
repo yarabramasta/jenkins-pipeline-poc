@@ -1,0 +1,33 @@
+services:
+  pipeline:
+    image: jenkins/jenkins:jdk17
+    container_name: cicd-pipeline
+    privileged: true
+    user: root
+    ports:
+      - 8080:8080
+      - 50000:50000
+    networks:
+      - jenkins
+
+  app_server:
+    image: lscr.io/linuxserver/openssh-server:latest
+    container_name: openssh-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Jakarta
+      - SUDO_ACCESS=true
+      - PASSWORD_ACCESS=true
+      - USER_PASSWORD=pipeline
+      - USER_NAME=jenkins
+    ports:
+      - "2222:2222"
+    volumes:
+      - ./docker/vol/openssh-server/config:/config
+    networks:
+      - jenkins
+
+networks:
+  jenkins:
+    driver: bridge
