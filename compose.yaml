@@ -1,14 +1,42 @@
 services:
+  jenkins-docker:
+    image: docker:dind
+    container_name: jenkins-docker
+    privileged: true
+    user: root
+    networks:
+      jenkins:
+        aliases:
+          - docker
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+    volumes:
+      - jenkins-docker-certs:/certs/client
+      - jenkins-data:/var/jenkins_home
+    ports:
+      - "2376:2376"
+    restart: unless-stopped
+
   pipeline:
     image: jenkins/jenkins:jdk17
     container_name: cicd-pipeline
     privileged: true
     user: root
-    ports:
-      - 8080:8080
-      - 50000:50000
     networks:
       - jenkins
+    environment:
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client:ro
+    restart: unless-stopped
+    depends_on:
+      - jenkins-docker
 
   app_server:
     image: lscr.io/linuxserver/openssh-server:latest
@@ -24,10 +52,15 @@ services:
     ports:
       - "2222:2222"
     volumes:
-      - ./docker/vol/openssh-server/config:/config
+      - openssh-server-config:/config
     networks:
       - jenkins
 
 networks:
   jenkins:
     driver: bridge
+
+volumes:
+  jenkins-data:
+  jenkins-docker-certs:
+  openssh-server-config:
