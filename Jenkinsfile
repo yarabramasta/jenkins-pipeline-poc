@@ -9,30 +9,32 @@ pipeline {
       }
 
       stage('Send to VPS') {
-        sshPublisher(
-          publishers: [
-            sshPublisherDesc(
-              configName: 'docker-local-fake-vps',
-              sshCredentials: [
-                encryptedPassphrase: '{AQAAABAAAAAQmAqRPU+1/PYAfNCB/p23R23C/iWSan7vX++hPcLU9xc=}', key: '', keyPath: '', username: 'jenkins'
-              ],
-              transfers: [
-                sshTransfer(
-                  cleanRemote: false, excludes: '',
-                  execCommand: './bin/deploy.sh',
-                  execTimeout: 120000,
-                  flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
-                  patternSeparator: '[, ]+', remoteDirectory: '/my-react-app-pipeline',
-                  remoteDirectorySDF: false, removePrefix: '',
-                  sourceFiles: '**/*'
-                )
-              ],
-              usePromotionTimestamp: false,
-              useWorkspaceInPromotion: false,
-              verbose: true
-            )
-          ]
-        )
+        steps {
+          sshPublisher(
+            publishers: [
+              sshPublisherDesc(
+                configName: 'docker-local-fake-vps',
+                sshCredentials: [
+                  encryptedPassphrase: '{AQAAABAAAAAQmAqRPU+1/PYAfNCB/p23R23C/iWSan7vX++hPcLU9xc=}', key: '', keyPath: '', username: 'jenkins'
+                ],
+                transfers: [
+                  sshTransfer(
+                    cleanRemote: false, excludes: '',
+                    execCommand: './bin/deploy.sh',
+                    execTimeout: 120000,
+                    flatten: false, makeEmptyDirs: false, noDefaultExcludes: false,
+                    patternSeparator: '[, ]+', remoteDirectory: '/my-react-app-pipeline',
+                    remoteDirectorySDF: false, removePrefix: '',
+                    sourceFiles: '**/*'
+                  )
+                ],
+                usePromotionTimestamp: false,
+                useWorkspaceInPromotion: false,
+                verbose: true
+              )
+            ]
+          )
+        }
       }
     }
   }
