@@ -1,4 +1,6 @@
 #!/bin/sh
 cd ./web
-echo "Deploying to production server..."
-echo "Building the project..."
+# Install dependencies
+npm run ci
+# Build the project
+npm run build
