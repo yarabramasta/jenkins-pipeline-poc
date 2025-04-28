@@ -99,6 +99,8 @@ For the project, go to your repository and proceed with this guide from Gitlab d
 
 ![gitlab-jenkins-repository-integration-succeed](assets/gitlab-jenkins-repository-integration-succeed.png)
 
+Before going to next setup, first we need to install Jenkins plugin called `Publish Over SSH`. **Manage Jenkins > Plugins > Installed Plugins** and search for `Publish Over SSH` plugin.
+
 Now the setup is done, we can move to next step, setting up the CI/CD pipeline using git integration.
 
 ## CI/CD Setup

@@ -1,66 +1,33 @@
 services:
-  jenkins-docker:
-    image: docker:dind
-    container_name: jenkins-docker
-    privileged: true
-    user: root
-    networks:
-      jenkins:
-        aliases:
-          - docker
-    environment:
-      - DOCKER_TLS_CERTDIR=/certs
-    volumes:
-      - jenkins-docker-certs:/certs/client
-      - jenkins-data:/var/jenkins_home
-    ports:
-      - "2376:2376"
-    restart: unless-stopped
-
-  pipeline:
-    image: jenkins/jenkins:jdk17
-    container_name: cicd-pipeline
-    privileged: true
-    user: root
-    networks:
-      - jenkins
-    environment:
-      - DOCKER_HOST=tcp://docker:2376
-      - DOCKER_CERT_PATH=/certs/client
-      - DOCKER_TLS_VERIFY=1
+  jenkins:
+    image: jenkins/jenkins:jdk21
+    container_name: jenkins
     ports:
       - "8080:8080"
       - "50000:50000"
     volumes:
-      - jenkins-data:/var/jenkins_home
-      - jenkins-docker-certs:/certs/client:ro
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock  # optional if you want Jenkins to control Docker too
+    # environment:
+      # - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
     restart: unless-stopped
-    depends_on:
-      - jenkins-docker
-
-  app_server:
-    image: lscr.io/linuxserver/openssh-server:latest
-    container_name: openssh-server
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Asia/Jakarta
-      - SUDO_ACCESS=true
-      - PASSWORD_ACCESS=true
-      - USER_PASSWORD=pipeline
-      - USER_NAME=jenkins
-    ports:
-      - "2222:2222"
-    volumes:
-      - openssh-server-config:/config
     networks:
       - jenkins
+
+  fake-vps:
+    build:
+      context: ./playground
+      dockerfile: Dockerfile
+    container_name: fake-vps
+    ports:
+      - "2222:22"
+    restart: unless-stopped
 
 networks:
   jenkins:
     driver: bridge
 
 volumes:
-  jenkins-data:
-  jenkins-docker-certs:
-  openssh-server-config:
+  jenkins_home:
+  # jenkins-docker-certs:
+  # openssh-server-config:
