@@ -91,7 +91,13 @@ Next step is to go to **Manage Jenkins > System** and scroll until `GitLab` sect
 
 It will look like this if succeed:
 
-![jenkins-gitlab-itegration-succeed](assets/jenkins-gitlab-itegration-succeed.png)
+![jenkins-gitlab-integration-succeed](assets/jenkins-gitlab-integration-succeed.png)
+
+For the project, go to your repository and proceed with this guide from Gitlab docs on how to do integration with Jenkins.
+
+![gitlab-jenkins-repository-integration](assets/gitlab-jenkins-repository-integration.png)
+
+![gitlab-jenkins-repository-integration-succeed](assets/gitlab-jenkins-repository-integration-succeed.png)
 
 Now the setup is done, we can move to next step, setting up the CI/CD pipeline using git integration.
 
@@ -99,6 +105,28 @@ Now the setup is done, we can move to next step, setting up the CI/CD pipeline u
 
 First step is to create New Item.
 
-Based on GitLab guides, you can select either Pipeline or Freestyle option. We'll stick to the guide and choose Freestyle
+Based on GitLab guides, you can select either Pipeline or Freestyle option. We'll stick to the guide and choose Freestyle.
 
 ![jenkins-new-item](assets/jenkins-new-item.png)
+
+Next is to setup the pipeline. It should look like this:
+
+![jenkins-pipeline-setup](assets/jenkins-pipeline-setup.png)
+
+> NB: Use credentials we are creating before for our GitLab account.
+
+On this step, we configure which repository should be used for this pipeline. You can make setup like this or tryna experiment yourself.
+
+![jenkins-pipeline-setup-source-code](assets/jenkins-pipeline-setup-source-code.png)
+
+> NB: Credentials used for this one is not the same as the Gitlab one, but it is for your git account, the simplest one will be username & password credential type. I am using username & ssh key to be more secure. The step is the same like in how to create Gitlab credential in the previous step, it's just using different type of credential.
+
+![jenkins-pipeline-add-git-ssh-creds](assets/jenkins-pipeline-add-git-ssh-creds.png)
+
+For git repository, the triggers should be like this.
+
+![jenkins-pipeline-setup-triggers](assets/jenkins-pipeline-setup-triggers.png)
+
+Next step, is to configure the environment, since it is will be deployed to vps, we need to create new credentials with type ssh username & private key like in git account step, but this time for your vps server.
+
+![jenkins-pipeline-setup-ssh-env](assets/jenkins-pipeline-setup-ssh-env.png)
