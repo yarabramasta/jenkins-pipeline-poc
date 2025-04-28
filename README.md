@@ -129,6 +129,20 @@ For git repository, the triggers should be like this.
 
 ![jenkins-pipeline-setup-triggers](assets/jenkins-pipeline-setup-triggers.png)
 
-Next step, is to configure the environment, since it is will be deployed to vps, we need to create new credentials with type ssh username & private key like in git account step, but this time for your vps server.
+Next step, is to configure the environment, since it is will be deployed to vps, we need to create new credentials, this time for your vps server.
 
 ![jenkins-pipeline-setup-ssh-env](assets/jenkins-pipeline-setup-ssh-env.png)
+
+Now for the build steps, we can easily utilise file `./bin/deploy.sh`, it should look like this:
+
+First build steps is for updating file permission.
+
+![jenkins-pipeline-setup-build-update-shell-script](assets/jenkins-pipeline-setup-build-update-shell-script.png)
+
+Second step is to send the files ready for production to ssh server.
+
+![jenkins-pipeline-setup-build-send-to-ssh](assets/jenkins-pipeline-setup-build-send-to-ssh.png)
+
+![jenkins-pipeline-setup-build-advanced](assets/jenkins-pipeline-setup-build-advanced.png)
+
+![jenkins-pipeline-setup-build-postbuild](assets/jenkins-pipeline-setup-build-postbuild.png)
