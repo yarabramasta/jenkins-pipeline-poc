@@ -14,14 +14,23 @@ services:
     networks:
       - jenkins
 
-  fake-vps:
-    build:
-      context: ./playground
-      dockerfile: Dockerfile
-    container_name: fake-vps
+  app_server:
+    image: lscr.io/linuxserver/openssh-server:latest
+    container_name: openssh-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Jakarta
+      - SUDO_ACCESS=true
+      - PASSWORD_ACCESS=true
+      - USER_PASSWORD=pipeline
+      - USER_NAME=jenkins
     ports:
-      - "2222:22"
-    restart: unless-stopped
+      - "2222:2222"
+    volumes:
+      - openssh-server-config:/config
+    networks:
+      - jenkins
 
 networks:
   jenkins:
@@ -30,4 +39,4 @@ networks:
 volumes:
   jenkins_home:
   # jenkins-docker-certs:
-  # openssh-server-config:
+  openssh-server-config:
